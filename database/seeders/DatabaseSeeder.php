@@ -2,47 +2,41 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
+use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Seed bảng Users (10 bản ghi)
-        $userIds = [];
+        // 1. Tạo 10 Users
         for ($i = 1; $i <= 10; $i++) {
-            $userIds[] = DB::table('users')->insertGetId([
-                'name' => "Người dùng $i",
-                'email' => "user$i@example.com",
-                'password' => Hash::make('password123'),
-                'created_at' => now(),
-                'updated_at' => now(),
+            $user = User::create([
+                'name' => 'Thành viên ' . $i,
+                'email' => 'user' . $i . '@gmail.com',
+                'password' => Hash::make('12345678'),
             ]);
-        }
 
-        // 2. Seed bảng Posts (10 bản ghi, liên kết với users)
-        $postIds = [];
-        for ($i = 1; $i <= 10; $i++) {
-            $postIds[] = DB::table('posts')->insertGetId([
-                'user_id' => $userIds[array_rand($userIds)],
-                'title' => "Tiêu đề bài viết số $i",
-                'content' => "Nội dung chi tiết cho bài viết số $i thuộc hệ thống.",
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+            // 2. Mỗi user tạo 2 Posts
+            for ($j = 1; $j <= 2; $j++) {
+                $post = Post::create([
+                    'user_id' => $user->id,
+                    'title' => 'Bài viết thú vị số ' . $i . '-' . $j,
+                    'content' => 'Nội dung chi tiết của bài viết mẫu được chia sẻ trên hệ thống blog cá nhân.',
+                ]);
 
-        // 3. Seed bảng Comments (10 bản ghi, liên kết với posts)
-        for ($i = 1; $i <= 10; $i++) {
-            DB::table('comments')->insert([
-                'post_id' => $postIds[array_rand($postIds)],
-                'author_name' => "Khách bình luận $i",
-                'content' => "Bình luận số $i: Bài viết rất hữu ích!",
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+                // 3. Mỗi post tạo 2 Comments
+                for ($k = 1; $k <= 2; $k++) {
+                    Comment::create([
+                        'post_id' => $post->id,
+                        'user_id' => $user->id, // Bổ sung user_id cho comment
+                        'content' => 'Bình luận số ' . $k . ' cho bài viết tuyệt vời này!', // Sửa 'body' thành 'content'
+                    ]);
+                }
+            }
         }
     }
 }
