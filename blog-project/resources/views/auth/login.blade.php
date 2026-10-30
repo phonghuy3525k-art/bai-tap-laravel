@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -14,6 +12,12 @@
         <div class="card shadow">
             <div class="card-body">
                 <h3 class="text-center mb-4">Đăng nhập hệ thống</h3>
+
+                @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+                @endif
 
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -37,11 +41,19 @@
                         <input type="password" name="password" class="form-control" required>
                     </div>
 
+                    <!-- THÊM LINK QUÊN MẬT KHẨU Ở ĐÂY -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="form-check">
+                            <!-- (Tùy chọn) Nhớ tài khoản -->
+                        </div>
+                        <a href="{{ route('password.request') }}" class="text-decoration-none small">Quên mật khẩu?</a>
+                    </div>
+
                     <button type="submit" class="btn btn-primary w-100 mb-3">Đăng nhập</button>
                 </form>
 
                 <div class="text-center">
-                    <p>Chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký ngay</a></p>
+                    <p class="mb-0">Chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký ngay</a></p>
                 </div>
             </div>
         </div>

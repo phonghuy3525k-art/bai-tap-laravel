@@ -8,8 +8,13 @@ use App\Http\Controllers\AuthController;
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']); 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// === BỔ SUNG ROUTE QUÊN MẬT KHẨU Ở ĐÂY ===
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetPassword'])->name('password.email');
+// ===========================================
 
 // Route danh sách bài viết (Công khai)
 Route::get('/post', [PostController::class, 'index'])->name('post.index');
@@ -25,3 +30,8 @@ Route::middleware(['auth'])->group(function () {
 
 // Route chi tiết bài viết (Đặt ở cuối vì có tham số động {id})
 Route::get('/post/{id}', [PostController::class, 'show'])->name('post.show');
+
+// Test trang 404 tùy chỉnh
+Route::get('/404', function () {
+    abort(404);
+});
